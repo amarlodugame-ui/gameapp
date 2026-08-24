@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('daily_sign_in_claims', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedTinyInteger('day_no');
+            $table->decimal('required_bet', 16, 2);
+            $table->decimal('reward_amount', 16, 2);
+            $table->decimal('bet_total', 16, 2)->default(0);
+            $table->date('qualified_date');
+            $table->timestamp('claimed_at');
+            $table->timestamps();
+
+            $table->unique(['user_id', 'day_no']);
+            $table->index(['user_id', 'qualified_date']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('daily_sign_in_claims');
+    }
+};
